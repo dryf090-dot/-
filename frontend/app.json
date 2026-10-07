@@ -71,7 +71,8 @@
         {
           "locationWhenInUsePermission": "لعرض مواقيت الصلاة الدقيقة لمدينتك"
         }
-      ]
+      ],
+      "expo-background-task"
     ],
     "experiments": {
       "typedRoutes": true

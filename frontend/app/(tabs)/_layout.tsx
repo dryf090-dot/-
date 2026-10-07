@@ -19,8 +19,12 @@ export default function TabsLayout() {
           <NativeTabs.Trigger.Label>الإعدادات</NativeTabs.Trigger.Label>
         </NativeTabs.Trigger>
         <NativeTabs.Trigger name="adhkar">
-          <NativeTabs.Trigger.Icon sf="book.fill" />
+          <NativeTabs.Trigger.Icon sf="sparkles" />
           <NativeTabs.Trigger.Label>الأذكار</NativeTabs.Trigger.Label>
+        </NativeTabs.Trigger>
+        <NativeTabs.Trigger name="quran">
+          <NativeTabs.Trigger.Icon sf="book.fill" />
+          <NativeTabs.Trigger.Label>القرآن</NativeTabs.Trigger.Label>
         </NativeTabs.Trigger>
         <NativeTabs.Trigger name="index">
           <NativeTabs.Trigger.Icon sf="moon.stars.fill" />
@@ -59,6 +63,14 @@ export default function TabsLayout() {
         options={{
           title: "الأذكار",
           tabBarButtonTestID: "tab-adhkar",
+          tabBarIcon: ({ color, size }) => <Feather name="heart" color={color} size={size} />,
+        }}
+      />
+      <Tabs.Screen
+        name="quran"
+        options={{
+          title: "القرآن",
+          tabBarButtonTestID: "tab-quran",
           tabBarIcon: ({ color, size }) => <Feather name="book-open" color={color} size={size} />,
         }}
       />

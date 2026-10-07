@@ -16,6 +16,7 @@ export type Settings = {
   lng: number;
   locLabel: string;
   hasLocation: boolean;
+  quiet: boolean;
 };
 
 // Default: Makkah until the user shares their location.
@@ -28,7 +29,36 @@ const DEFAULTS: Settings = {
   lng: 39.8262,
   locLabel: "مكة المكرمة",
   hasLocation: false,
+  quiet: true,
 };
+
+const K = "tidhkar.";
+
+// Also used by the background task (no React there).
+export async function loadSettings(): Promise<Settings> {
+  const [master, interval, adhan, ids, lat, lng, label, has, quiet] = await Promise.all([
+    storage.getItem(K + "master", DEFAULTS.master),
+    storage.getItem(K + "interval", DEFAULTS.interval),
+    storage.getItem(K + "adhan", DEFAULTS.adhan),
+    storage.getItem(K + "enabledIds", DEFAULTS.enabledIds.join(",")),
+    storage.getItem(K + "lat", DEFAULTS.lat),
+    storage.getItem(K + "lng", DEFAULTS.lng),
+    storage.getItem(K + "locLabel", DEFAULTS.locLabel),
+    storage.getItem(K + "hasLocation", DEFAULTS.hasLocation),
+    storage.getItem(K + "quiet", DEFAULTS.quiet),
+  ]);
+  return {
+    master: !!master,
+    interval: ([15, 30, 60].includes(Number(interval)) ? Number(interval) : 30) as Interval,
+    adhan: !!adhan,
+    enabledIds: String(ids ?? "").split(",").filter(Boolean),
+    lat: Number(lat),
+    lng: Number(lng),
+    locLabel: String(label),
+    hasLocation: !!has,
+    quiet: !!quiet,
+  };
+}
 
 export type LocationResult = "granted" | "denied" | "blocked" | "error";
 
@@ -41,36 +71,16 @@ type Ctx = {
 };
 
 const SettingsContext = createContext<Ctx | null>(null);
-const K = "tidhkar.";
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState<Settings>(DEFAULTS);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      const [master, interval, adhan, ids, lat, lng, label, has] = await Promise.all([
-        storage.getItem(K + "master", DEFAULTS.master),
-        storage.getItem(K + "interval", DEFAULTS.interval),
-        storage.getItem(K + "adhan", DEFAULTS.adhan),
-        storage.getItem(K + "enabledIds", DEFAULTS.enabledIds.join(",")),
-        storage.getItem(K + "lat", DEFAULTS.lat),
-        storage.getItem(K + "lng", DEFAULTS.lng),
-        storage.getItem(K + "locLabel", DEFAULTS.locLabel),
-        storage.getItem(K + "hasLocation", DEFAULTS.hasLocation),
-      ]);
-      setSettings({
-        master: !!master,
-        interval: ([15, 30, 60].includes(Number(interval)) ? Number(interval) : 30) as Interval,
-        adhan: !!adhan,
-        enabledIds: String(ids ?? "").split(",").filter(Boolean),
-        lat: Number(lat),
-        lng: Number(lng),
-        locLabel: String(label),
-        hasLocation: !!has,
-      });
+    loadSettings().then((s) => {
+      setSettings(s);
       setReady(true);
-    })();
+    });
   }, []);
 
   const update = useCallback((patch: Partial<Settings>) => {

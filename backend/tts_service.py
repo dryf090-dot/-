@@ -12,8 +12,11 @@ ADHKAR = {
 }
 
 INSTRUCTIONS = (
-    "Speak in clear, classical Arabic (Fusha) with correct tashkeel pronunciation. "
-    "Calm, reverent, warm and spiritual delivery, slow measured pace, like a gentle mosque reciter."
+    "Voice: a native Saudi Arabian man from Makkah, like an imam of Al-Masjid Al-Haram. "
+    "Accent: authentic Saudi (Hijazi/Najdi) Arabic pronunciation, never an English or foreign accent. "
+    "Pronounce every Arabic letter correctly from its makhraj, with full tashkeel, deep heavy letters (ص ض ط ظ ق) "
+    "and clear ع ح. Tone: calm, warm, humble and reverent, spiritual remembrance of Allah. "
+    "Pacing: slow and measured with a gentle melodic flow, slight elongation on long vowels (madd)."
 )
 
 

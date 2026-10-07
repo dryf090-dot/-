@@ -9,6 +9,7 @@ import { KeyboardProvider } from "react-native-keyboard-controller";
 
 import { ErrorBoundary } from "@/src/components/error-boundary";
 import { ReminderSync } from "@/src/components/ReminderSync";
+import "@/src/backgroundSync";
 import { queryClient } from "@/src/query-client";
 import { SettingsProvider } from "@/src/settings";
 import { colors } from "@/src/theme";
@@ -21,6 +22,7 @@ export default function RootLayout() {
   const [loaded, error] = useFonts({
     Amiri: require("../assets/fonts/Amiri-Regular.ttf"),
     "Amiri-Bold": require("../assets/fonts/Amiri-Bold.ttf"),
+    AmiriQuran: require("../assets/fonts/AmiriQuran-Regular.ttf"),
     ArefRuqaa: require("../assets/fonts/ArefRuqaa-Bold.ttf"),
     Tajawal: require("../assets/fonts/Tajawal-Regular.ttf"),
     "Tajawal-Medium": require("../assets/fonts/Tajawal-Medium.ttf"),

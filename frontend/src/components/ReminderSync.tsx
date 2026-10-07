@@ -4,6 +4,7 @@ import * as Notifications from "expo-notifications";
 
 import { playSound, stopSound } from "../audio";
 import type { SoundId } from "../adhkar";
+import { cachePrayerData, registerBackgroundSync } from "../backgroundSync";
 import { usePrayerTimes } from "../prayer";
 import { nextDhikrSlots, setupChannels, syncReminders } from "../reminders";
 import { useSettings } from "../settings";
@@ -13,6 +14,14 @@ import { showToast } from "../toast";
 export function ReminderSync() {
   const { settings, ready } = useSettings();
   const { data } = usePrayerTimes();
+
+  useEffect(() => {
+    if (data) cachePrayerData(data);
+  }, [data]);
+
+  useEffect(() => {
+    registerBackgroundSync();
+  }, []);
 
   useEffect(() => {
     if (!ready || Platform.OS === "web") return;

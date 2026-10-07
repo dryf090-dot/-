@@ -2,6 +2,7 @@
 export const fonts = {
   display: "Amiri",
   displayBold: "Amiri-Bold",
+  quran: "AmiriQuran",
   ruqaa: "ArefRuqaa",
   text: "Tajawal",
   textMedium: "Tajawal-Medium",

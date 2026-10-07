@@ -81,6 +81,16 @@ export default function SettingsScreen() {
               );
             })}
           </View>
+          <View style={styles.divider} />
+          <Row icon="moon" title="إيقاف الأذكار ليلًا" sub="لا تذكير من ١١ مساءً حتى ٥ فجرًا (الأذان يبقى مفعّلًا)">
+            <Switch
+              value={settings.quiet}
+              onValueChange={(v) => update({ quiet: v })}
+              trackColor={{ false: colors.surfaceTertiary, true: colors.brandSecondary }}
+              thumbColor={settings.quiet ? colors.brandPrimary : colors.muted}
+              testID="settings-quiet-switch"
+            />
+          </Row>
         </Section>
 
         <Section title="الصلاة">
@@ -154,7 +164,7 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-function Row({ icon, title, sub, children }: { icon: "bell" | "volume-2" | "map-pin" | "shield"; title: string; sub: string; children?: ReactNode }) {
+function Row({ icon, title, sub, children }: { icon: "bell" | "volume-2" | "map-pin" | "shield" | "moon"; title: string; sub: string; children?: ReactNode }) {
   return (
     <View style={styles.row}>
       <View style={styles.icon}>

@@ -12,6 +12,7 @@ import { InfoBanner } from "@/src/components/InfoBanner";
 import { Ornament } from "@/src/components/Ornament";
 import { NextDhikrCard } from "@/src/components/NextDhikrCard";
 import { PrayerRow } from "@/src/components/PrayerRow";
+import { QuickActions } from "@/src/components/QuickActions";
 import { usesNativeTabs } from "@/src/navigation";
 import { formatCountdown, PRAYERS, upcomingPrayers, useNow, usePrayerTimes, timeOf } from "@/src/prayer";
 import { useNotifPermission } from "@/src/reminders";
@@ -114,6 +115,8 @@ export default function Home() {
               onPress={onLocate}
             />
           )}
+
+          <QuickActions />
 
           <NextDhikrCard />
 

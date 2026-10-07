@@ -43,6 +43,9 @@ export function enabledAdhkar(s: Settings): Dhikr[] {
   return ADHKAR.filter((d) => s.enabledIds.includes(d.id));
 }
 
+// Quiet hours (when enabled): no dhikr reminders 11 PM – 5 AM. Adhan alerts still fire.
+export const isQuietTime = (d: Date) => d.getHours() >= 23 || d.getHours() < 5;
+
 // Slot-based rotation: every interval boundary picks the next enabled dhikr in order.
 export function nextDhikrSlots(s: Settings, count: number, now = Date.now()) {
   const list = enabledAdhkar(s);
@@ -51,8 +54,10 @@ export function nextDhikrSlots(s: Settings, count: number, now = Date.now()) {
   let t = Math.ceil(now / ms) * ms;
   if (t - now < 5_000) t += ms;
   const out: { date: Date; dhikr: Dhikr }[] = [];
-  for (let i = 0; i < count; i++, t += ms) {
-    out.push({ date: new Date(t), dhikr: list[Math.floor(t / ms) % list.length] });
+  for (let guard = 0; out.length < count && guard < count * 3; guard++, t += ms) {
+    const date = new Date(t);
+    if (s.quiet && isQuietTime(date)) continue;
+    out.push({ date, dhikr: list[Math.floor(t / ms) % list.length] });
   }
   return out;
 }

@@ -4,9 +4,10 @@ from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, Field, BeforeValidator, ConfigDict
-from typing import Annotated, Optional, Dict
+from typing import Annotated, Optional, Dict, List
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
+import math
 import os
 import logging
 import httpx
@@ -118,6 +119,83 @@ async def prayer_times(
         "tomorrow": {"date": d2.date, "timings": d2.timings, "hijri": d2.hijri},
         "timezone": d1.timezone,
     }
+
+
+OVERPASS_URLS = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter"]
+
+
+def haversine_m(lat1, lng1, lat2, lng2):
+    r = 6371000
+    p1, p2 = math.radians(lat1), math.radians(lat2)
+    dp, dl = math.radians(lat2 - lat1), math.radians(lng2 - lng1)
+    a = math.sin(dp / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dl / 2) ** 2
+    return 2 * r * math.asin(math.sqrt(a))
+
+
+async def overpass(lat: float, lng: float, radius: int):
+    q = (
+        f'[out:json][timeout:20];('
+        f'node["amenity"="place_of_worship"]["religion"="muslim"](around:{radius},{lat},{lng});'
+        f'way["amenity"="place_of_worship"]["religion"="muslim"](around:{radius},{lat},{lng});'
+        f'relation["amenity"="place_of_worship"]["religion"="muslim"](around:{radius},{lat},{lng});'
+        f');out center tags 200;'
+    )
+    async with httpx.AsyncClient(timeout=25, headers={"User-Agent": "Tidhkar/1.0 (prayer app)"}) as http:
+        for url in OVERPASS_URLS:
+            try:
+                r = await http.post(url, data={"data": q})
+                if r.status_code == 200:
+                    return r.json().get("elements", [])
+                logger.warning("overpass %s -> %s", url, r.status_code)
+            except Exception as e:
+                logger.warning("overpass %s failed: %s", url, e)
+    raise HTTPException(502, "تعذر البحث عن المساجد حاليًا")
+
+
+class MosqueCache(BaseDocument):
+    key: str
+    items: List[dict]
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+
+@api_router.get("/mosques")
+async def mosques(lat: float = Query(..., ge=-90, le=90), lng: float = Query(..., ge=-180, le=180)):
+    key = f"{round(lat, 3)}:{round(lng, 3)}"
+    doc = await db.mosque_cache.find_one({"key": key})
+    if doc:
+        cached = MosqueCache.from_mongo(doc)
+        if datetime.fromisoformat(cached.created_at) > datetime.now(timezone.utc) - timedelta(days=3):
+            return {"items": cached.items, "source": "OpenStreetMap"}
+    items = []
+    for radius in (2000, 5000, 15000):
+        elements = await overpass(lat, lng, radius)
+        items = []
+        seen = set()
+        for el in elements:
+            plat = el.get("lat") or (el.get("center") or {}).get("lat")
+            plng = el.get("lon") or (el.get("center") or {}).get("lon")
+            if plat is None or plng is None:
+                continue
+            tags = el.get("tags", {})
+            oid = f"{el['type']}-{el['id']}"
+            if oid in seen:
+                continue
+            seen.add(oid)
+            items.append({
+                "id": oid,
+                "name": tags.get("name:ar") or tags.get("name") or "مسجد",
+                "lat": plat,
+                "lng": plng,
+                "distance_m": round(haversine_m(lat, lng, plat, plng)),
+            })
+        if len(items) >= 5:
+            break
+    items.sort(key=lambda x: x["distance_m"])
+    items = items[:30]
+    await db.mosque_cache.update_one(
+        {"key": key}, {"$set": MosqueCache(key=key, items=items).to_mongo()}, upsert=True
+    )
+    return {"items": items, "source": "OpenStreetMap"}
 
 
 app.include_router(api_router)
