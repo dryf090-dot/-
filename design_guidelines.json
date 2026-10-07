@@ -1,0 +1,144 @@
+{
+  "app_name": "Tidhkar (تذكار)",
+  "personality": "6 Glass / Luxe DARK",
+  "personality_one_liner": "A cinematic, deeply elegant spiritual space blending glowing antique gold typography with dark emerald glass and beautiful architecture.",
+  "color": {
+    "surface": "#0D110D",
+    "onSurface": "#F2F4F0",
+    "surfaceSecondary": "#182118",
+    "onSurfaceSecondary": "#D8DED5",
+    "surfaceTertiary": "#212C21",
+    "onSurfaceTertiary": "#B6C2B2",
+    "surfaceInverse": "#F2F4F0",
+    "onSurfaceInverse": "#0D110D",
+    "brand": "#C5A861",
+    "onBrand": "#0D110D",
+    "brandPrimary": "#C5A861",
+    "onBrandPrimary": "#0D110D",
+    "brandSecondary": "#34523B",
+    "onBrandSecondary": "#F2F4F0",
+    "brandTertiary": "#34523B",
+    "onBrandTertiary": "#C5A861",
+    "success": "#4CAF50",
+    "onSuccess": "#FFFFFF",
+    "warning": "#D99B41",
+    "onWarning": "#FFFFFF",
+    "error": "#CF5353",
+    "onError": "#FFFFFF",
+    "info": "#4B7A99",
+    "onInfo": "#FFFFFF",
+    "border": "#2E3D2E",
+    "borderStrong": "#455945",
+    "divider": "#1E291E",
+    "muted": "#889985"
+  },
+  "typography": {
+    "displayFontFamily": "Amiri",
+    "textFontFamily": "Tajawal",
+    "scale": {
+      "sm": 12,
+      "base": 14,
+      "lg": 16,
+      "xl": 20,
+      "2xl": 24,
+      "3xl": 32,
+      "4xl": 48
+    }
+  },
+  "spacing": {
+    "rule": "Generous, cinematic padding. Cards should never touch screen edges. Use empty space intentionally to give the calligraphy room to breathe.",
+    "xs": 4,
+    "sm": 8,
+    "md": 12,
+    "lg": 16,
+    "xl": 24,
+    "2xl": 32,
+    "3xl": 48
+  },
+  "radius_tokens": {
+    "sm": 6,
+    "md": 12,
+    "lg": 20,
+    "pill": 999
+  },
+  "shadow_tier": "0",
+  "navigation": "bottom_tabs",
+  "icon_set": "Feather",
+  "glassmorphism": {
+    "enabled": "true",
+    "do's": [
+      "Use heavy glass blur for the bottom tab bar and header over scrolling content.",
+      "Apply frosted glass (with #182118 base tint at 75% opacity) for the Next Prayer hero card overlaying the background image.",
+      "Ensure text on glass uses onSurface and has perfect contrast."
+    ],
+    "dont's": [
+      "Do not blur standard list rows in the Adhkar tab; use surfaceSecondary instead.",
+      "Do not blur form inputs or switches."
+    ]
+  },
+  "platform_libraries": {
+    "glass": {
+      "ios": "expo-blur",
+      "android": "expo-blur",
+      "low_end_android_fallback": "solid surfaceSecondary"
+    },
+    "image": "expo-image",
+    "blur": "expo-blur",
+    "bottom_sheet": "@gorhom/bottom-sheet",
+    "animation": "react-native-reanimated",
+    "gesture": "react-native-gesture-handler"
+  },
+  "screens": [
+    {
+      "name": "الرئيسية (Home)",
+      "purpose": "Displays the majestic next prayer countdown hero and the daily 5 prayer times list.",
+      "states": {
+        "loading": "Centered minimalist spinner in Antique Gold.",
+        "empty": "No prayer data (show location permission prompt).",
+        "error": "Failed to fetch GPS/Prayer times. Show retry button."
+      },
+      "layout": "Top half is a full-bleed hero image of the Sheikh Zayed mosque at night, covered with a vertical gradient scrim (transparent to surface). Placed centrally in the hero is a large frosted glass card showing the Next Prayer name and large countdown timer in Amiri font. Below the hero is a vertical list of the 5 prayers in surfaceSecondary cards. The active/next prayer card is highlighted with a brandPrimary (Gold) border and glow."
+    },
+    {
+      "name": "الأذكار (Adhkar)",
+      "purpose": "List of rotating dhikr reminders where users can toggle active ones and listen to the audio.",
+      "states": {
+        "loading": "Standard spinner.",
+        "empty": "No dhikr selected.",
+        "error": "Failed to load audio."
+      },
+      "layout": "A cinematic header featuring a dark Islamic pattern background. The body contains a list of cards, each holding a beautiful Arabic dhikr (e.g., 'صلِّ على محمد') in large Amiri text. Each card has a Play icon button (to preview the AI voice) and a standard native Switch to enable/disable it in the rotation."
+    },
+    {
+      "name": "الإعدادات (Settings)",
+      "purpose": "Configuration for audio, intervals, and location.",
+      "states": {
+        "loading": "Spinner.",
+        "empty": "N/A",
+        "error": "N/A"
+      },
+      "layout": "Minimalist list of settings. Master switch at the top. Segmented control (or selectable chips) for interval selection (15, 30, 60 mins). A button to refresh location for accurate Adhan. UI should be right-to-left (RTL) natively."
+    }
+  ],
+  "images": {
+    "hero_mosque": {
+      "url": "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzJ8MHwxfHNlYXJjaHwyfHxiZWF1dGlmdWwlMjBtb3NxdWUlMjBhcmNoaXRlY3R1cmUlMjBuaWdodCUyMHBob3RvZ3JhcGh5fGVufDB8fHx8MTc5MTMzNTUzNHww&ixlib=rb-4.1.0&q=85",
+      "dark": "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzJ8MHwxfHNlYXJjaHwyfHxiZWF1dGlmdWwlMjBtb3NxdWUlMjBhcmNoaXRlY3R1cmUlMjBuaWdodCUyMHBob3RvZ3JhcGh5fGVufDB8fHx8MTc5MTMzNTUzNHww&ixlib=rb-4.1.0&q=85",
+      "alt": "Beautiful Sheikh Zayed Grand Mosque at night, illuminated over water"
+    },
+    "pattern_header": {
+      "url": "https://images.unsplash.com/photo-1773903181852-78d3fdf1aa81?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHwyfHxpc2xhbWljJTIwYXJhYmVzcXVlJTIwZ2VvbWV0cmljJTIwcGF0dGVybiUyMGRhcmslMjBiYWNrZ3JvdW5kfGVufDB8fHx8MTc5MTMzNTUzNHww&ixlib=rb-4.1.0&q=85",
+      "dark": "https://images.unsplash.com/photo-1773903181852-78d3fdf1aa81?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHwyfHxpc2xhbWljJTIwYXJhYmVzcXVlJTIwZ2VvbWV0cmljJTIwcGF0dGVybiUyMGRhcmslMjBiYWNrZ3JvdW5kfGVufDB8fHx8MTc5MTMzNTUzNHww&ixlib=rb-4.1.0&q=85",
+      "alt": "Dark geometric arabesque Islamic pattern"
+    }
+  },
+  "instructions_to_main_agent": [
+    "Load Google Fonts 'Amiri' and 'Tajawal' using @expo-google-fonts or expo-font with downloaded TTF if required. Apply 'Amiri' strictly for display typography (prayer names, dhikr text, timer), and 'Tajawal' for standard UI labels.",
+    "Implement RTL layout. Use 'flexDirection: row-reverse' or I18nManager.forceRTL(true) globally. Make sure icons point the correct way.",
+    "For the Home tab's hero section, implement a gradient scrim (expo-linear-gradient) over the background image (transparent at top, #0D110D at bottom) to ensure the prayer times list scrolling up perfectly blends with the hero image.",
+    "Use expo-blur heavily but correctly. The 'Next Prayer' card on the Home screen should be frosted glass (tint #182118, opacity 75%) hovering over the mosque image.",
+    "Audio TTS for Dhikr reminders should be wired in the Adhkar list (play button).",
+    "Interval selector should use a high-contrast elegant segmented control or prominent choice chips.",
+    "Colors: Strictly adhere to the Dark Espresso/Emerald/Gold palette. No blue or purple allowed."
+  ]
+}

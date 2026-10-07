@@ -1,0 +1,80 @@
+{
+  "expo": {
+    "name": "تذكار",
+    "slug": "frontend",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "frontend",
+    "userInterfaceStyle": "dark",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.emergent.prayerreminderapp.juun28",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "لعرض مواقيت الصلاة الدقيقة لمدينتك"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#0D110D"
+      },
+      "package": "com.emergent.prayerreminderapp.juun28",
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "POST_NOTIFICATIONS",
+        "VIBRATE",
+        "RECEIVE_BOOT_COMPLETED"
+      ]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-image.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#0D110D"
+        }
+      ],
+      "expo-font",
+      "expo-image",
+      "expo-secure-store",
+      "expo-web-browser",
+      "expo-status-bar",
+      "expo-audio",
+      "@react-native-vector-icons/feather",
+      [
+        "expo-notifications",
+        {
+          "color": "#C5A861",
+          "sounds": [
+            "./assets/sounds/salawat.wav",
+            "./assets/sounds/tahlil.wav",
+            "./assets/sounds/tasbih.wav",
+            "./assets/sounds/hamd.wav",
+            "./assets/sounds/takbir.wav",
+            "./assets/sounds/istighfar.wav",
+            "./assets/sounds/adhan.wav"
+          ]
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "لعرض مواقيت الصلاة الدقيقة لمدينتك"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
